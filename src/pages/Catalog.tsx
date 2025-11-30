@@ -15,62 +15,7 @@ interface Product {
   inStock: boolean;
 }
 
-const mockProducts: Product[] = [
-  {
-    id: 1,
-    name: 'Беспроводные наушники ProSound X9',
-    price: 8990,
-    category: 'Аудио',
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
-    vkLink: 'https://vk.com/product1',
-    inStock: true,
-  },
-  {
-    id: 2,
-    name: 'Смарт-часы FitTrack Ultra',
-    price: 12490,
-    category: 'Носимые',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',
-    vkLink: 'https://vk.com/product2',
-    inStock: true,
-  },
-  {
-    id: 3,
-    name: 'Портативная колонка BoomBox Pro',
-    price: 6990,
-    category: 'Аудио',
-    image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500',
-    vkLink: 'https://vk.com/product3',
-    inStock: true,
-  },
-  {
-    id: 4,
-    name: 'Игровая мышь RazerStrike RGB',
-    price: 4990,
-    category: 'Компьютеры',
-    image: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=500',
-    vkLink: 'https://vk.com/product4',
-    inStock: true,
-  },
-  {
-    id: 5,
-    name: 'Механическая клавиатура KeyMaster',
-    price: 7990,
-    category: 'Компьютеры',
-    image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500',
-    vkLink: 'https://vk.com/product5',
-    inStock: false,
-  },
-  {
-    id: 6,
-    name: 'Power Bank UltraCharge 20000mAh',
-    price: 3490,
-    category: 'Аксессуары',
-    image: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=500',
-    vkLink: 'https://vk.com/product6',
-    inStock: true,
-  },
-];
+const mockProducts: Product[] = [];
 
 const categories = ['Все', 'Аудио', 'Носимые', 'Компьютеры', 'Аксессуары'];
 
@@ -141,70 +86,84 @@ export default function Catalog() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product, index) => (
-            <Card 
-              key={product.id} 
-              className="overflow-hidden hover:card-glow transition-all duration-300 hover:scale-105 animate-fade-in bg-card/80 backdrop-blur-sm border-2 border-primary/20"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <CardHeader className="p-0">
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={product.image} 
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-                  />
-                  {!product.inStock && (
-                    <Badge className="absolute top-2 right-2 bg-destructive">
-                      Нет в наличии
-                    </Badge>
-                  )}
-                  {product.inStock && (
-                    <Badge className="absolute top-2 right-2 bg-secondary">
-                      В наличии
-                    </Badge>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent className="p-4">
-                <Badge variant="outline" className="mb-2">{product.category}</Badge>
-                <CardTitle className="text-xl mb-2">{product.name}</CardTitle>
-                <p className="text-3xl font-bold gradient-text">{product.price.toLocaleString()} ₽</p>
-              </CardContent>
-              <CardFooter className="p-4 pt-0 flex gap-2">
-                {isInCart(product.id) ? (
-                  <>
+        {filteredProducts.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="mb-6 flex justify-center">
+              <div className="p-6 bg-primary/10 rounded-full">
+                <Icon name="Package" size={64} className="text-primary" />
+              </div>
+            </div>
+            <h3 className="text-3xl font-bold mb-4 gradient-text">Каталог пуст</h3>
+            <p className="text-muted-foreground text-lg">
+              Товары появятся здесь после добавления администратором
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((product, index) => (
+              <Card 
+                key={product.id} 
+                className="overflow-hidden hover:card-glow transition-all duration-300 hover:scale-105 animate-fade-in bg-card/80 backdrop-blur-sm border-2 border-primary/20"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <CardHeader className="p-0">
+                  <div className="relative h-48 overflow-hidden">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    />
+                    {!product.inStock && (
+                      <Badge className="absolute top-2 right-2 bg-destructive">
+                        Нет в наличии
+                      </Badge>
+                    )}
+                    {product.inStock && (
+                      <Badge className="absolute top-2 right-2 bg-secondary">
+                        В наличии
+                      </Badge>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <Badge variant="outline" className="mb-2">{product.category}</Badge>
+                  <CardTitle className="text-xl mb-2">{product.name}</CardTitle>
+                  <p className="text-3xl font-bold gradient-text">{product.price.toLocaleString()} ₽</p>
+                </CardContent>
+                <CardFooter className="p-4 pt-0 flex gap-2">
+                  {isInCart(product.id) ? (
+                    <>
+                      <Button
+                        variant="secondary"
+                        className="flex-1 gap-2"
+                        onClick={() => removeFromCart(product.id)}
+                      >
+                        <Icon name="Trash2" size={18} />
+                        Удалить
+                      </Button>
+                      <Button
+                        className="flex-1 gap-2 bg-gradient-to-r from-primary to-secondary"
+                        onClick={() => window.open(product.vkLink, '_blank')}
+                      >
+                        <Icon name="ExternalLink" size={18} />
+                        Купить в VK
+                      </Button>
+                    </>
+                  ) : (
                     <Button
-                      variant="secondary"
-                      className="flex-1 gap-2"
-                      onClick={() => removeFromCart(product.id)}
+                      className="w-full gap-2"
+                      onClick={() => addToCart(product.id)}
+                      disabled={!product.inStock}
                     >
-                      <Icon name="Trash2" size={18} />
-                      Удалить
+                      <Icon name="ShoppingCart" size={18} />
+                      В корзину
                     </Button>
-                    <Button
-                      className="flex-1 gap-2 bg-gradient-to-r from-primary to-secondary"
-                      onClick={() => window.open(product.vkLink, '_blank')}
-                    >
-                      <Icon name="ExternalLink" size={18} />
-                      Купить в VK
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    className="w-full gap-2"
-                    onClick={() => addToCart(product.id)}
-                    disabled={!product.inStock}
-                  >
-                    <Icon name="ShoppingCart" size={18} />
-                    В корзину
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
+                  )}
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
