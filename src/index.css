@@ -53,8 +53,15 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     font-family: "Roboto", sans-serif;
+    background:
+      linear-gradient(rgba(16, 24, 39, 0.92), rgba(26, 31, 44, 0.95)),
+      url("https://cdn.poehali.dev/files/962e1e1d-3fc2-4850-b32c-30e7b983a09c.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 
   h1,
