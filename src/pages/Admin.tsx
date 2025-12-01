@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 
-const categories = ['Аудио', 'Носимые', 'Компьютеры', 'Аксессуары'];
+const categories = ['Аудио', 'Носимые', 'Компьютеры', 'Аксессуары', 'Комплектующие'];
 
 export default function Admin() {
   const { products, addProduct, updateProduct, deleteProduct } = useProductsStore();

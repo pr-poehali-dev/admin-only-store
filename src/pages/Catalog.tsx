@@ -6,7 +6,7 @@ import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { useProductsStore } from '@/store/productsStore';
 
-const categories = ['Все', 'Аудио', 'Носимые', 'Компьютеры', 'Аксессуары'];
+const categories = ['Все', 'Аудио', 'Носимые', 'Компьютеры', 'Аксессуары', 'Комплектующие'];
 
 export default function Catalog() {
   const { products } = useProductsStore();
