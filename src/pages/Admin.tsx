@@ -260,22 +260,31 @@ export default function Admin() {
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="image">URL изображения *</Label>
-                <Input
-                  id="image"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
-                />
+                <Label htmlFor="image">Изображение товара *</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="imageFile"
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setFormData({ ...formData, image: reader.result as string });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="flex-1"
+                  />
+                </div>
                 {formData.image && (
                   <div className="mt-2 rounded-lg overflow-hidden border">
                     <img
                       src={formData.image}
                       alt="Превью"
                       className="w-full h-48 object-cover"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
                     />
                   </div>
                 )}
