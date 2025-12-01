@@ -1,0 +1,41 @@
+{
+  "tests": [
+    {
+      "name": "Test OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedHeaders": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "name": "Test POST order with valid data",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "product": {
+          "id": "1",
+          "name": "Test Product",
+          "price": 5000,
+          "image": "https://example.com/image.jpg"
+        },
+        "customer": {
+          "name": "Иван Иванов",
+          "phone": "+7 999 123-45-67",
+          "email": "test@example.com",
+          "deliveryMethod": "pickup",
+          "paymentMethod": "cash",
+          "address": "",
+          "comment": "Тестовый заказ"
+        },
+        "totalPrice": 5000
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { useProductsStore } from '@/store/productsStore';
+import { OrderForm } from '@/components/OrderForm';
 
 const categories = ['Все', 'Аудио', 'Носимые', 'Компьютеры', 'Аксессуары', 'Комплектующие'];
 
@@ -12,6 +14,7 @@ export default function Catalog() {
   const { products } = useProductsStore();
   const [selectedCategory, setSelectedCategory] = useState('Все');
   const [cart, setCart] = useState<number[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
   const { toast } = useToast();
 
   const filteredProducts = selectedCategory === 'Все' 
@@ -133,10 +136,11 @@ export default function Catalog() {
                       </Button>
                       <Button
                         className="flex-1 gap-2 bg-gradient-to-r from-primary to-secondary"
-                        onClick={() => window.open(product.vkLink, '_blank')}
+                        onClick={() => setSelectedProduct(product)}
+                        disabled={!product.inStock}
                       >
-                        <Icon name="ExternalLink" size={18} />
-                        Купить в VK
+                        <Icon name="ShoppingBag" size={18} />
+                        Купить
                       </Button>
                     </>
                   ) : (
@@ -155,6 +159,22 @@ export default function Catalog() {
           </div>
         )}
       </div>
+
+      <Dialog open={!!selectedProduct} onOpenChange={(open) => !open && setSelectedProduct(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {selectedProduct && (
+            <OrderForm
+              product={{
+                id: String(selectedProduct.id),
+                name: selectedProduct.name,
+                price: selectedProduct.price,
+                image: selectedProduct.image,
+              }}
+              onClose={() => setSelectedProduct(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
