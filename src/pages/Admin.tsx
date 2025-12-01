@@ -31,6 +31,7 @@ export default function Admin() {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -111,6 +112,41 @@ export default function Admin() {
       title: 'Успешно',
       description: 'Товар удален',
     });
+  };
+
+  const handleImageFile = (file: File) => {
+    if (file && file.type.match('image/(png|jpeg|jpg)')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      toast({
+        title: 'Ошибка',
+        description: 'Поддерживаются только PNG и JPG файлы',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      handleImageFile(file);
+    }
   };
 
   return (
@@ -261,31 +297,50 @@ export default function Admin() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="image">Изображение товара *</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="imageFile"
-                    type="file"
-                    accept="image/png,image/jpeg,image/jpg"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setFormData({ ...formData, image: reader.result as string });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                    className="flex-1"
-                  />
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={`border-2 border-dashed rounded-lg p-6 text-center transition-all ${
+                    isDragging
+                      ? 'border-primary bg-primary/10'
+                      : 'border-muted-foreground/30 hover:border-primary/50'
+                  }`}
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <Icon name="Upload" size={32} className="text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">
+                      Перетащите изображение сюда или
+                    </p>
+                    <Input
+                      id="imageFile"
+                      type="file"
+                      accept="image/png,image/jpeg,image/jpg"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleImageFile(file);
+                        }
+                      }}
+                      className="max-w-xs"
+                    />
+                  </div>
                 </div>
                 {formData.image && (
-                  <div className="mt-2 rounded-lg overflow-hidden border">
+                  <div className="mt-2 rounded-lg overflow-hidden border relative">
                     <img
                       src={formData.image}
                       alt="Превью"
                       className="w-full h-48 object-cover"
                     />
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2"
+                      onClick={() => setFormData({ ...formData, image: '' })}
+                    >
+                      <Icon name="X" size={16} />
+                    </Button>
                   </div>
                 )}
               </div>
