@@ -37,7 +37,6 @@ export default function Admin() {
     price: '',
     category: categories[0],
     image: '',
-    vkLink: '',
     inStock: true,
   });
 
@@ -47,14 +46,13 @@ export default function Admin() {
       price: '',
       category: categories[0],
       image: '',
-      vkLink: '',
       inStock: true,
     });
     setEditingProduct(null);
   };
 
   const handleSubmit = () => {
-    if (!formData.name || !formData.price || !formData.image || !formData.vkLink) {
+    if (!formData.name || !formData.price || !formData.image) {
       toast({
         title: 'Ошибка',
         description: 'Заполните все обязательные поля',
@@ -68,7 +66,6 @@ export default function Admin() {
       price: parseFloat(formData.price),
       category: formData.category,
       image: formData.image,
-      vkLink: formData.vkLink,
       inStock: formData.inStock,
     };
 
@@ -98,7 +95,6 @@ export default function Admin() {
         price: product.price.toString(),
         category: product.category,
         image: product.image,
-        vkLink: product.vkLink,
         inStock: product.inStock,
       });
       setEditingProduct(productId);
@@ -343,15 +339,6 @@ export default function Admin() {
                     </Button>
                   </div>
                 )}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="vkLink">Ссылка на VK *</Label>
-                <Input
-                  id="vkLink"
-                  value={formData.vkLink}
-                  onChange={(e) => setFormData({ ...formData, vkLink: e.target.value })}
-                  placeholder="https://vk.com/product"
-                />
               </div>
               <div className="flex items-center justify-between">
                 <Label htmlFor="inStock">Товар в наличии</Label>

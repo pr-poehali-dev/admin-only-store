@@ -7,7 +7,6 @@ export interface Product {
   price: number;
   category: string;
   image: string;
-  vkLink: string;
   inStock: boolean;
 }
 
