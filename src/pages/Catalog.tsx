@@ -4,29 +4,19 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  image: string;
-  vkLink: string;
-  inStock: boolean;
-}
-
-const mockProducts: Product[] = [];
+import { useProductsStore } from '@/store/productsStore';
 
 const categories = ['Все', 'Аудио', 'Носимые', 'Компьютеры', 'Аксессуары'];
 
 export default function Catalog() {
+  const { products } = useProductsStore();
   const [selectedCategory, setSelectedCategory] = useState('Все');
   const [cart, setCart] = useState<number[]>([]);
   const { toast } = useToast();
 
   const filteredProducts = selectedCategory === 'Все' 
-    ? mockProducts 
-    : mockProducts.filter(p => p.category === selectedCategory);
+    ? products 
+    : products.filter(p => p.category === selectedCategory);
 
   const addToCart = (productId: number) => {
     setCart([...cart, productId]);

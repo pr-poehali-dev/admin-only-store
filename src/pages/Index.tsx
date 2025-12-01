@@ -14,6 +14,7 @@ export default function Index() {
           <nav className="flex gap-4">
             <Button variant="ghost" onClick={() => navigate('/')}>Главная</Button>
             <Button variant="ghost" onClick={() => navigate('/catalog')}>Каталог</Button>
+            <Button variant="ghost" onClick={() => navigate('/admin')}>Админ</Button>
             <Button variant="ghost">О магазине</Button>
             <Button variant="ghost">Контакты</Button>
             <Button variant="ghost">FAQ</Button>
