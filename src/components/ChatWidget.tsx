@@ -32,12 +32,13 @@ export function ChatWidget() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!inputValue.trim()) return;
 
+    const messageText = inputValue;
     const newMessage: Message = {
       id: Date.now().toString(),
-      text: inputValue,
+      text: messageText,
       sender: 'user',
       timestamp: new Date(),
     };
@@ -45,15 +46,29 @@ export function ChatWidget() {
     setMessages([...messages, newMessage]);
     setInputValue('');
 
-    setTimeout(() => {
-      const autoReply: Message = {
-        id: (Date.now() + 1).toString(),
-        text: 'Спасибо за сообщение! Мы ответим вам в ближайшее время.',
-        sender: 'admin',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, autoReply]);
-    }, 1000);
+    try {
+      await fetch('https://functions.poehali.dev/64b5b481-f689-4d8f-b369-ea5665fab1ce', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: messageText,
+        }),
+      });
+
+      setTimeout(() => {
+        const autoReply: Message = {
+          id: (Date.now() + 1).toString(),
+          text: 'Спасибо за сообщение! Мы ответим вам в ближайшее время.',
+          sender: 'admin',
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, autoReply]);
+      }, 1000);
+    } catch (error) {
+      console.error('Failed to send message to Telegram:', error);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
