@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { useProductsStore } from '@/store/productsStore';
 import { useToast } from '@/hooks/use-toast';
+import { AdminOrders } from '@/components/AdminOrders';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Dialog,
   DialogContent,
@@ -148,25 +150,39 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-4xl font-bold mb-2 gradient-text">Админ-панель</h1>
-            <p className="text-muted-foreground">Управление товарами каталога</p>
-          </div>
-          <Button
-            size="lg"
-            className="gap-2"
-            onClick={() => {
-              resetForm();
-              setIsDialogOpen(true);
-            }}
-          >
-            <Icon name="Plus" size={20} />
-            Добавить товар
-          </Button>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 gradient-text">Админ-панель</h1>
+          <p className="text-muted-foreground">Управление магазином</p>
         </div>
 
-        {products.length === 0 ? (
+        <Tabs defaultValue="products" className="space-y-6">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="products">
+              <Icon name="Package" size={18} className="mr-2" />
+              Товары
+            </TabsTrigger>
+            <TabsTrigger value="orders">
+              <Icon name="ShoppingBag" size={18} className="mr-2" />
+              Заказы
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="products" className="space-y-6">
+            <div className="flex justify-end">
+              <Button
+                size="lg"
+                className="gap-2"
+                onClick={() => {
+                  resetForm();
+                  setIsDialogOpen(true);
+                }}
+              >
+                <Icon name="Plus" size={20} />
+                Добавить товар
+              </Button>
+            </div>
+
+            {products.length === 0 ? (
           <div className="text-center py-16">
             <div className="mb-6 flex justify-center">
               <div className="p-6 bg-primary/10 rounded-full">
@@ -242,6 +258,12 @@ export default function Admin() {
             ))}
           </div>
         )}
+          </TabsContent>
+
+          <TabsContent value="orders">
+            <AdminOrders />
+          </TabsContent>
+        </Tabs>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">

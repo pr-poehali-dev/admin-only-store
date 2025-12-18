@@ -1,0 +1,19 @@
+{
+  "tests": [
+    {
+      "name": "Test OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedHeaders": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "name": "Test GET messages for non-existent order",
+      "method": "GET",
+      "path": "/?orderNumber=TEST-123",
+      "expectedStatus": 404
+    }
+  ]
+}

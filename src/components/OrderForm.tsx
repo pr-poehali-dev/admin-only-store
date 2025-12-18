@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,6 +20,7 @@ interface OrderFormProps {
 }
 
 export function OrderForm({ product, onClose }: OrderFormProps) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -30,6 +32,7 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [orderNumber, setOrderNumber] = useState('');
 
   const deliveryPrice = formData.deliveryMethod === 'delivery' ? 300 : 0;
   const totalPrice = product.price + deliveryPrice;
@@ -58,10 +61,8 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
         throw new Error(data.error || 'Ошибка отправки заказа');
       }
 
+      setOrderNumber(data.orderNumber);
       setSubmitStatus('success');
-      setTimeout(() => {
-        onClose();
-      }, 2000);
     } catch (error) {
       console.error('Ошибка:', error);
       setSubmitStatus('error');
@@ -248,9 +249,20 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
         </div>
 
         {submitStatus === 'success' && (
-          <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4 flex items-center gap-2">
-            <Icon name="CheckCircle" size={20} />
-            <span>Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.</span>
+          <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Icon name="CheckCircle" size={20} />
+              <span className="font-semibold">Заказ #{orderNumber} успешно оформлен!</span>
+            </div>
+            <p className="text-sm mb-4">Вы можете общаться с продавцом в личном чате по вашему заказу</p>
+            <Button
+              type="button"
+              onClick={() => navigate(`/order-chat?order=${orderNumber}`)}
+              className="w-full"
+            >
+              <Icon name="MessageSquare" size={20} className="mr-2" />
+              Открыть чат с продавцом
+            </Button>
           </div>
         )}
 
