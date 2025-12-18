@@ -40,7 +40,7 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
     setSubmitStatus('idle');
 
     try {
-      const response = await fetch('https://functions.poehali.dev/a98a8588-3078-475d-940a-1042588c8498', {
+      const response = await fetch('https://functions.poehali.dev/2e7598d3-362a-41f8-b2a6-4ea9678435d6', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
