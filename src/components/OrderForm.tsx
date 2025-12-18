@@ -52,8 +52,10 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Ошибка отправки заказа');
+        throw new Error(data.error || 'Ошибка отправки заказа');
       }
 
       setSubmitStatus('success');
