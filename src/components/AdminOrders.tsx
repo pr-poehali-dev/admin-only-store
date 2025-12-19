@@ -12,11 +12,26 @@ interface Order {
   customerName: string;
   customerPhone: string;
   customerEmail: string;
+  deliveryMethod: string;
+  deliveryCompany?: string;
+  deliveryAddress?: string;
   totalPrice: number;
   status: string;
   createdAt: string;
   messageCount: number;
 }
+
+const getDeliveryCompanyName = (company: string) => {
+  const companies: Record<string, string> = {
+    'cdek': 'СДЭК',
+    'boxberry': 'Boxberry',
+    'pochta': 'Почта России',
+    'dpd': 'DPD',
+    'yandex': 'Яндекс Доставка',
+    'none': 'Своя служба доставки'
+  };
+  return companies[company] || company;
+};
 
 export function AdminOrders() {
   const navigate = useNavigate();
@@ -113,6 +128,20 @@ export function AdminOrders() {
                 <div className="flex items-center gap-2">
                   <Icon name="Mail" size={16} className="text-muted-foreground" />
                   <span>{order.customerEmail}</span>
+                </div>
+              )}
+              
+              <div className="flex items-center gap-2">
+                <Icon name="Truck" size={16} className="text-muted-foreground" />
+                <span>
+                  {order.deliveryMethod === 'pickup' ? 'Самовывоз' : `Доставка${order.deliveryCompany ? ` — ${getDeliveryCompanyName(order.deliveryCompany)}` : ''}`}
+                </span>
+              </div>
+              
+              {order.deliveryAddress && (
+                <div className="flex items-start gap-2">
+                  <Icon name="MapPin" size={16} className="text-muted-foreground mt-1" />
+                  <span className="text-sm">{order.deliveryAddress}</span>
                 </div>
               )}
               

@@ -44,7 +44,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 SELECT 
                     o.id, o.order_number, o.product_name, o.customer_name, 
                     o.customer_phone, o.customer_email, o.total_price, 
-                    o.status, o.created_at,
+                    o.status, o.created_at, o.delivery_method, o.delivery_company,
+                    o.delivery_address,
                     COUNT(m.id) as message_count
                 FROM orders o
                 LEFT JOIN order_messages m ON o.id = m.order_id
@@ -64,7 +65,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'totalPrice': row[6],
                     'status': row[7],
                     'createdAt': row[8].isoformat(),
-                    'messageCount': row[9]
+                    'deliveryMethod': row[9],
+                    'deliveryCompany': row[10],
+                    'deliveryAddress': row[11],
+                    'messageCount': row[12]
                 })
             
             cur.close()

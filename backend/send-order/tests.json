@@ -25,6 +25,7 @@
           "phone": "+7 999 123-45-67",
           "email": "test@example.com",
           "deliveryMethod": "pickup",
+          "deliveryCompany": "none",
           "paymentMethod": "cash",
           "address": "",
           "comment": "Тестовый заказ"

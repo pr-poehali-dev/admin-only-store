@@ -63,9 +63,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             INSERT INTO orders (
                 order_number, product_id, product_name, product_price,
                 customer_name, customer_phone, customer_email,
-                delivery_method, delivery_address, payment_method,
+                delivery_method, delivery_company, delivery_address, payment_method,
                 total_price, comment, status
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ''', (
             order_number,
             product.get('id', ''),
@@ -75,6 +75,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             customer.get('phone', ''),
             customer.get('email', ''),
             customer.get('deliveryMethod', 'pickup'),
+            customer.get('deliveryCompany', 'none'),
             customer.get('address', ''),
             customer.get('paymentMethod', 'cash'),
             total_price,
@@ -97,6 +98,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     delivery_methods = {
         'pickup': 'Самовывоз',
         'delivery': 'Доставка'
+    }
+    
+    delivery_companies = {
+        'cdek': 'СДЭК',
+        'boxberry': 'Boxberry',
+        'pochta': 'Почта России',
+        'dpd': 'DPD',
+        'yandex': 'Яндекс Доставка',
+        'none': 'Своя служба доставки'
     }
     
     payment_methods = {
@@ -127,6 +137,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         <p>
           <strong>{delivery_methods.get(customer.get('deliveryMethod', 'pickup'), 'Самовывоз')}</strong>
         </p>
+        {f"<p>Транспортная компания: <strong>{delivery_companies.get(customer.get('deliveryCompany', 'none'), 'Не выбрана')}</strong></p>" if customer.get('deliveryMethod') == 'delivery' else ''}
         {f"<p>Адрес: {customer.get('address', '')}</p>" if customer.get('address') else ''}
         
         <h3>Оплата:</h3>

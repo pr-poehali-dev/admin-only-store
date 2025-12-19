@@ -27,6 +27,7 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
     email: '',
     address: '',
     deliveryMethod: 'pickup',
+    deliveryCompany: 'none',
     paymentMethod: 'cash',
     comment: '',
   });
@@ -34,7 +35,22 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [orderNumber, setOrderNumber] = useState('');
 
-  const deliveryPrice = formData.deliveryMethod === 'delivery' ? 300 : 0;
+  const getDeliveryPrice = () => {
+    if (formData.deliveryMethod === 'pickup') return 0;
+    if (formData.deliveryCompany === 'none') return 300;
+    
+    const prices: Record<string, number> = {
+      'cdek': 350,
+      'boxberry': 320,
+      'pochta': 280,
+      'dpd': 400,
+      'yandex': 450,
+    };
+    
+    return prices[formData.deliveryCompany] || 300;
+  };
+
+  const deliveryPrice = getDeliveryPrice();
   const totalPrice = product.price + deliveryPrice;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -161,7 +177,7 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
                   <Icon name="Truck" size={20} />
                   <div>
                     <div className="font-medium">Доставка</div>
-                    <div className="text-sm text-muted-foreground">300 ₽</div>
+                    <div className="text-sm text-muted-foreground">от 280 ₽</div>
                   </div>
                 </div>
               </Label>
@@ -169,17 +185,87 @@ export function OrderForm({ product, onClose }: OrderFormProps) {
           </RadioGroup>
 
           {formData.deliveryMethod === 'delivery' && (
-            <div className="grid gap-2">
-              <Label htmlFor="address">Адрес доставки *</Label>
-              <Textarea
-                id="address"
-                required
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                placeholder="Улица, дом, квартира"
-                rows={3}
-              />
-            </div>
+            <>
+              <div className="space-y-3">
+                <Label>Выберите транспортную компанию *</Label>
+                <RadioGroup
+                  value={formData.deliveryCompany}
+                  onValueChange={(value) => setFormData({ ...formData, deliveryCompany: value })}
+                >
+                  <div className="flex items-center justify-between border rounded-lg p-3">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="cdek" id="cdek" />
+                      <Label htmlFor="cdek" className="cursor-pointer font-medium">
+                        СДЭК
+                      </Label>
+                    </div>
+                    <span className="text-sm font-semibold">350 ₽</span>
+                  </div>
+
+                  <div className="flex items-center justify-between border rounded-lg p-3">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="boxberry" id="boxberry" />
+                      <Label htmlFor="boxberry" className="cursor-pointer font-medium">
+                        Boxberry
+                      </Label>
+                    </div>
+                    <span className="text-sm font-semibold">320 ₽</span>
+                  </div>
+
+                  <div className="flex items-center justify-between border rounded-lg p-3">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="pochta" id="pochta" />
+                      <Label htmlFor="pochta" className="cursor-pointer font-medium">
+                        Почта России
+                      </Label>
+                    </div>
+                    <span className="text-sm font-semibold">280 ₽</span>
+                  </div>
+
+                  <div className="flex items-center justify-between border rounded-lg p-3">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="dpd" id="dpd" />
+                      <Label htmlFor="dpd" className="cursor-pointer font-medium">
+                        DPD
+                      </Label>
+                    </div>
+                    <span className="text-sm font-semibold">400 ₽</span>
+                  </div>
+
+                  <div className="flex items-center justify-between border rounded-lg p-3">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yandex" id="yandex" />
+                      <Label htmlFor="yandex" className="cursor-pointer font-medium">
+                        Яндекс Доставка
+                      </Label>
+                    </div>
+                    <span className="text-sm font-semibold">450 ₽</span>
+                  </div>
+
+                  <div className="flex items-center justify-between border rounded-lg p-3">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="none" id="none" />
+                      <Label htmlFor="none" className="cursor-pointer font-medium">
+                        Своя служба доставки
+                      </Label>
+                    </div>
+                    <span className="text-sm font-semibold">300 ₽</span>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="address">Адрес доставки *</Label>
+                <Textarea
+                  id="address"
+                  required
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  placeholder="Улица, дом, квартира"
+                  rows={3}
+                />
+              </div>
+            </>
           )}
         </div>
 
