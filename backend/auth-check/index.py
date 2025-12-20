@@ -55,8 +55,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             ORDER BY o.created_at DESC
         ''')
         
-        conn.commit()
-        
         rows = cursor.fetchall()
         orders: List[Dict[str, Any]] = []
         
