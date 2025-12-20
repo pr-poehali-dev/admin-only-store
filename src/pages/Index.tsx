@@ -22,7 +22,8 @@ export default function Index() {
         showAbout={() => setShowAbout(true)}
         showContacts={() => setShowContacts(true)}
       />
-
+      
+      <div className="container mx-auto px-4 py-8">
         <section className="text-center mb-16 animate-fade-in">
           <h2 className="text-6xl font-bold mb-6 gradient-text neon-glow">
             Будущее гаджетов уже здесь
@@ -44,6 +45,7 @@ export default function Index() {
               size="lg" 
               variant="outline" 
               className="gap-2 text-lg hover:scale-105 transition-transform"
+              onClick={() => setShowAbout(true)}
             >
               <Icon name="Info" size={24} />
               Узнать больше
