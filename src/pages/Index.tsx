@@ -124,8 +124,8 @@ export default function Index() {
               <h4 className="font-semibold text-lg mb-3">Контакты</h4>
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <Icon name="Phone" size={18} className="text-primary" />
-                <a href="tel:89066664087" className="hover:text-primary transition-colors">
-                  8 (906) 666-40-87
+                <a href="tel:89066640872" className="hover:text-primary transition-colors">
+                  8 (906) 664-08-72
                 </a>
               </div>
               <p className="text-xs text-muted-foreground mt-2">Ежедневно с 9:00 до 21:00</p>
@@ -189,8 +189,8 @@ export default function Index() {
               </div>
               <div className="flex items-center gap-3 ml-9">
                 <Icon name="Phone" size={20} className="text-secondary" />
-                <a href="tel:89066664087" className="text-lg font-mono hover:text-primary transition-colors">
-                  8 (906) 666-40-87
+                <a href="tel:89066640872" className="text-lg font-mono hover:text-primary transition-colors">
+                  8 (906) 664-08-72
                 </a>
               </div>
             </div>
