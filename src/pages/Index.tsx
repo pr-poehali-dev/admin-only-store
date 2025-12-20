@@ -10,7 +10,7 @@ export default function Index() {
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12 backdrop-blur-sm bg-card/30 p-4 rounded-lg border border-primary/20">
-          <h1 className="text-3xl font-bold gradient-text neon-glow">Mister_gadget</h1>
+          <h1 className="text-3xl font-bold gradient-text neon-glow">Mister_gadjet</h1>
           <nav className="flex gap-4">
             <Button variant="ghost" onClick={() => navigate('/')}>Главная</Button>
             <Button variant="ghost" onClick={() => navigate('/catalog')}>Каталог</Button>
@@ -26,7 +26,7 @@ export default function Index() {
             Будущее гаджетов уже здесь
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Откройте для себя мир современных технологий с Mister_gadget. 
+            Откройте для себя мир современных технологий с Mister_gadjet. 
             Качественные гаджеты по доступным ценам.
           </p>
           <div className="flex gap-4 justify-center">
