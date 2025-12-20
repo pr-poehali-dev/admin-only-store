@@ -2,9 +2,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export default function Index() {
   const navigate = useNavigate();
+  const [showAbout, setShowAbout] = useState(false);
+  const [showContacts, setShowContacts] = useState(false);
 
   return (
     <div className="min-h-screen">
@@ -15,9 +19,8 @@ export default function Index() {
             <Button variant="ghost" onClick={() => navigate('/')}>Главная</Button>
             <Button variant="ghost" onClick={() => navigate('/catalog')}>Каталог</Button>
             <Button variant="ghost" onClick={() => navigate('/admin')}>Админ</Button>
-            <Button variant="ghost">О магазине</Button>
-            <Button variant="ghost">Контакты</Button>
-            <Button variant="ghost">FAQ</Button>
+            <Button variant="ghost" onClick={() => setShowAbout(true)}>О магазине</Button>
+            <Button variant="ghost" onClick={() => setShowContacts(true)}>Контакты</Button>
           </nav>
         </header>
 
@@ -112,6 +115,63 @@ export default function Index() {
           <p className="text-muted-foreground">© 2024 Mister_gadget. Все права защищены.</p>
         </footer>
       </div>
+
+      <Dialog open={showAbout} onOpenChange={setShowAbout}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-3xl gradient-text">О магазине Mister_gadjet</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 text-lg">
+            <p className="text-muted-foreground leading-relaxed">
+              Добро пожаловать в <span className="font-bold text-primary">Mister_gadjet</span> — ваш проводник в мир инновационных технологий! 
+              Мы создали этот магазин для тех, кто ценит качество, стиль и функциональность в каждой детали.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Наша миссия — сделать передовые гаджеты доступными каждому. От премиальных наушников с кристально чистым звуком 
+              до умных часов, которые станут вашим незаменимым помощником, — мы тщательно отбираем только лучшие устройства от проверенных производителей.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              <span className="font-semibold text-secondary">Что нас отличает?</span> Индивидуальный подход к каждому клиенту, 
+              молниеносная доставка, официальная гарантия на всю продукцию и команда экспертов, готовая помочь с выбором идеального гаджета.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Присоединяйтесь к тысячам довольных клиентов, которые уже открыли для себя будущее вместе с нами. 
+              В <span className="font-bold text-accent">Mister_gadjet</span> будущее начинается сегодня! 🚀
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showContacts} onOpenChange={setShowContacts}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-2xl gradient-text">Контакты</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <Icon name="Headphones" size={24} className="text-primary mt-1" />
+                <div>
+                  <h4 className="font-semibold text-lg mb-1">Техническая поддержка</h4>
+                  <p className="text-muted-foreground">Всегда на связи, чтобы помочь вам</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 ml-9">
+                <Icon name="Phone" size={20} className="text-secondary" />
+                <a href="tel:89066664087" className="text-lg font-mono hover:text-primary transition-colors">
+                  8 (906) 666-40-87
+                </a>
+              </div>
+            </div>
+            
+            <div className="pt-4 border-t border-primary/20">
+              <p className="text-sm text-muted-foreground text-center">
+                Мы работаем для вас ежедневно с 9:00 до 21:00
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
