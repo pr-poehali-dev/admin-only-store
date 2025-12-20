@@ -111,8 +111,39 @@ export default function Index() {
           </div>
         </section>
 
-        <footer className="text-center py-8 border-t border-primary/20">
-          <p className="text-muted-foreground">© 2024 Mister_gadget. Все права защищены.</p>
+        <footer className="py-8 border-t border-primary/20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+            <div className="text-center md:text-left">
+              <h4 className="font-bold text-lg mb-3 gradient-text">Mister_gadjet</h4>
+              <p className="text-sm text-muted-foreground">
+                Будущее гаджетов уже здесь
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <h4 className="font-semibold text-lg mb-3">Контакты</h4>
+              <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                <Icon name="Phone" size={18} className="text-primary" />
+                <a href="tel:89066664087" className="hover:text-primary transition-colors">
+                  8 (906) 666-40-87
+                </a>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Ежедневно с 9:00 до 21:00</p>
+            </div>
+            
+            <div className="text-center md:text-right">
+              <h4 className="font-semibold text-lg mb-3">Навигация</h4>
+              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+                <button onClick={() => navigate('/catalog')} className="hover:text-primary transition-colors">Каталог</button>
+                <button onClick={() => setShowAbout(true)} className="hover:text-primary transition-colors">О магазине</button>
+                <button onClick={() => setShowContacts(true)} className="hover:text-primary transition-colors">Контакты</button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-center pt-6 border-t border-primary/10">
+            <p className="text-sm text-muted-foreground">© 2024 Mister_gadget. Все права защищены.</p>
+          </div>
         </footer>
       </div>
 
