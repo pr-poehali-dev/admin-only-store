@@ -37,6 +37,7 @@ export function AdminOrders() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const loadOrders = async () => {
     try {
@@ -68,6 +69,17 @@ export function AdminOrders() {
     );
   }
 
+  const filteredOrders = statusFilter === 'all' 
+    ? orders 
+    : orders.filter(order => order.status === statusFilter);
+
+  const orderCounts = {
+    all: orders.length,
+    new: orders.filter(o => o.status === 'new').length,
+    processing: orders.filter(o => o.status === 'processing').length,
+    completed: orders.filter(o => o.status === 'completed').length,
+  };
+
   if (orders.length === 0) {
     return (
       <div className="text-center py-16">
@@ -79,10 +91,51 @@ export function AdminOrders() {
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold mb-4">Заказы клиентов ({orders.length})</h2>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Заказы клиентов ({orders.length})</h2>
+        
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            variant={statusFilter === 'all' ? 'default' : 'outline'}
+            onClick={() => setStatusFilter('all')}
+            size="sm"
+          >
+            Все ({orderCounts.all})
+          </Button>
+          <Button
+            variant={statusFilter === 'new' ? 'default' : 'outline'}
+            onClick={() => setStatusFilter('new')}
+            size="sm"
+          >
+            <Icon name="Clock" size={16} className="mr-1" />
+            Новые ({orderCounts.new})
+          </Button>
+          <Button
+            variant={statusFilter === 'processing' ? 'default' : 'outline'}
+            onClick={() => setStatusFilter('processing')}
+            size="sm"
+          >
+            <Icon name="Package" size={16} className="mr-1" />
+            В обработке ({orderCounts.processing})
+          </Button>
+          <Button
+            variant={statusFilter === 'completed' ? 'default' : 'outline'}
+            onClick={() => setStatusFilter('completed')}
+            size="sm"
+          >
+            <Icon name="CheckCircle" size={16} className="mr-1" />
+            Выполнено ({orderCounts.completed})
+          </Button>
+        </div>
+      </div>
       
-      {orders.map((order) => (
+      {filteredOrders.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">Нет заказов с таким статусом</p>
+        </div>
+      ) : (
+        filteredOrders.map((order) => (
         <Card key={order.id} className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <div className="flex items-start justify-between">
@@ -163,7 +216,8 @@ export function AdminOrders() {
             </div>
           </CardContent>
         </Card>
-      ))}
+        ))
+      )}
     </div>
   );
 }
