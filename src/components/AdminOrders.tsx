@@ -40,7 +40,7 @@ export function AdminOrders() {
 
   const loadOrders = async () => {
     try {
-      const response = await fetch('https://functions.poehali.dev/89d1cfc3-079c-4953-b6b0-8314c184f2b6');
+      const response = await fetch('https://functions.poehali.dev/6f5787b2-adbd-43f7-999d-1a161c5022b9');
       const data = await response.json();
       
       if (response.ok) {

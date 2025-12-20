@@ -33,6 +33,9 @@ export default function Admin() {
   const { products, addProduct, updateProduct, deleteProduct } = useProductsStore();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -148,6 +151,94 @@ export default function Admin() {
       handleImageFile(file);
     }
   };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('https://functions.poehali.dev/6f5787b2-adbd-43f7-999d-1a161c5022b9', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      
+      const data = await response.json();
+      
+      if (data.valid) {
+        setIsAuthenticated(true);
+        toast({
+          title: 'Добро пожаловать!',
+          description: 'Вход выполнен успешно',
+        });
+      } else {
+        toast({
+          title: 'Ошибка',
+          description: 'Неверный пароль',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось подключиться к серверу',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-3xl text-center gradient-text">Вход в админ-панель</CardTitle>
+            <p className="text-center text-muted-foreground mt-2">Введите пароль для доступа</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="password">Пароль</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Введите пароль"
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Icon name="Loader2" size={18} className="mr-2 animate-spin" />
+                    Проверка...
+                  </>
+                ) : (
+                  <>
+                    <Icon name="LogIn" size={18} className="mr-2" />
+                    Войти
+                  </>
+                )}
+              </Button>
+            </form>
+          </CardContent>
+          <CardFooter>
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/')}
+              className="w-full"
+            >
+              <Icon name="ArrowLeft" size={18} className="mr-2" />
+              На главную
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
