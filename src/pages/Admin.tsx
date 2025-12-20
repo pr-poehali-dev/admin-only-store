@@ -9,6 +9,7 @@ import { useProductsStore } from '@/store/productsStore';
 import { useToast } from '@/hooks/use-toast';
 import { AdminOrders } from '@/components/AdminOrders';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -31,6 +32,7 @@ const categories = ['Аудио', 'Носимые', 'Компьютеры', 'А�
 export default function Admin() {
   const { products, addProduct, updateProduct, deleteProduct } = useProductsStore();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -150,9 +152,20 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 gradient-text">Админ-панель</h1>
-          <p className="text-muted-foreground">Управление магазином</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold mb-2 gradient-text">Админ-панель</h1>
+            <p className="text-muted-foreground">Управление магазином</p>
+          </div>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => navigate('/')}
+            className="gap-2"
+          >
+            <Icon name="Home" size={20} />
+            На главную
+          </Button>
         </div>
 
         <Tabs defaultValue="products" className="space-y-6">
