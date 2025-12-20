@@ -1,28 +1,27 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Header } from '@/components/Header';
+import { useProductsStore } from '@/store/productsStore';
 
 export default function Index() {
   const navigate = useNavigate();
   const [showAbout, setShowAbout] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
+  const { products } = useProductsStore();
+  
+  const popularProducts = products.filter((p) => p.inStock).slice(0, 4);
 
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12 backdrop-blur-sm bg-card/30 p-4 rounded-lg border border-primary/20">
-          <h1 className="text-3xl font-bold gradient-text neon-glow">Mister_gadjet</h1>
-          <nav className="flex gap-4">
-            <Button variant="ghost" onClick={() => navigate('/')}>Главная</Button>
-            <Button variant="ghost" onClick={() => navigate('/catalog')}>Каталог</Button>
-            <Button variant="ghost" onClick={() => navigate('/admin')}>Админ</Button>
-            <Button variant="ghost" onClick={() => setShowAbout(true)}>О магазине</Button>
-            <Button variant="ghost" onClick={() => setShowContacts(true)}>Контакты</Button>
-          </nav>
-        </header>
+      <Header 
+        showAbout={() => setShowAbout(true)}
+        showContacts={() => setShowContacts(true)}
+      />
 
         <section className="text-center mb-16 animate-fade-in">
           <h2 className="text-6xl font-bold mb-6 gradient-text neon-glow">
@@ -110,6 +109,45 @@ export default function Index() {
             ))}
           </div>
         </section>
+
+        {popularProducts.length > 0 && (
+          <section className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-4xl font-bold gradient-text">Популярные товары</h3>
+              <Button variant="outline" onClick={() => navigate('/catalog')}>
+                Смотреть все
+                <Icon name="ArrowRight" size={18} className="ml-2" />
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {popularProducts.map((product, index) => (
+                <Card
+                  key={product.id}
+                  className="cursor-pointer hover:card-glow transition-all hover:scale-105 animate-fade-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => navigate(`/product/${product.id}`)}
+                >
+                  <div className="aspect-square overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform hover:scale-110"
+                    />
+                  </div>
+                  <CardContent className="p-4">
+                    <Badge variant="outline" className="mb-2">
+                      {product.category}
+                    </Badge>
+                    <h4 className="font-semibold mb-2 line-clamp-1">{product.name}</h4>
+                    <div className="text-xl font-bold text-primary">
+                      {product.price.toLocaleString()} ₽
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
 
         <footer className="py-8 border-t border-primary/20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">

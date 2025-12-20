@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
 interface Order {
@@ -35,6 +37,7 @@ const getDeliveryCompanyName = (company: string) => {
 
 export function AdminOrders() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -51,6 +54,32 @@ export function AdminOrders() {
       console.error('Failed to load orders:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (orderId: number, newStatus: string) => {
+    try {
+      const response = await fetch('https://functions.poehali.dev/6f5787b2-adbd-43f7-999d-1a161c5022b9', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, status: newStatus }),
+      });
+      
+      if (response.ok) {
+        setOrders(orders.map(order => 
+          order.id === orderId ? { ...order, status: newStatus } : order
+        ));
+        toast({
+          title: 'Статус обновлён',
+          description: 'Статус заказа успешно изменён',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось изменить статус',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -153,9 +182,31 @@ export function AdminOrders() {
                   })}
                 </p>
               </div>
-              <Badge variant={order.status === 'new' ? 'default' : 'secondary'}>
-                {order.status === 'new' ? 'Новый' : order.status}
-              </Badge>
+              <Select value={order.status} onValueChange={(value) => handleStatusChange(order.id, value)}>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="new">
+                    <div className="flex items-center gap-2">
+                      <Icon name="Clock" size={14} />
+                      Новый
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="processing">
+                    <div className="flex items-center gap-2">
+                      <Icon name="Package" size={14} />
+                      В обработке
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="completed">
+                    <div className="flex items-center gap-2">
+                      <Icon name="CheckCircle" size={14} />
+                      Выполнен
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </CardHeader>
           

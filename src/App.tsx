@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import Catalog from "./pages/Catalog";
 import Admin from "./pages/Admin";
 import OrderChat from "./pages/OrderChat";
+import ProductDetail from "./pages/ProductDetail";
+import TrackOrder from "./pages/TrackOrder";
 import NotFound from "./pages/NotFound";
 import { ChatWidget } from "@/components/ChatWidget";
 
@@ -22,6 +24,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/track-order" element={<TrackOrder />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/order-chat" element={<OrderChat />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
